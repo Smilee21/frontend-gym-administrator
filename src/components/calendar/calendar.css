@@ -1,0 +1,22 @@
+.rbc-month-row
+  .rbc-row-bg
+  .rbc-day-bg
+  .rbc-day-bg
+  .rbc-off-range-bg
+  .rbc-row-content {
+  min-width: 700px;
+}
+
+.rbc-date-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.rbc-row-bg .rbc-day-bg {
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.rbc-month-row {
+  margin-bottom: 12px;
+}
