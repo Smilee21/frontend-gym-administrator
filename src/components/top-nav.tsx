@@ -14,10 +14,9 @@ import Link from 'next/link'
 
 export default function TopNavigation() {
   return (
-    <header className="w-full h-24 z-50  bg-white bg-opacity-15 m-0 backdrop-blur-lg border shadow-md flex justify-between fixed px-32">
+    <header className="w-full h-24 z-50  bg-white bg-opacity-15 m-0 backdrop-blur-lg flex justify-between fixed px-24">
       <h2 className="self-center">FIT101</h2>
-
-      <NavigationMenu className=" self-center ">
+      <NavigationMenu className="self-center">
         <NavigationMenuList className="flex gap-8">
           <NavigationMenuItem>
             <Link href="/" legacyBehavior passHref prefetch={false}>

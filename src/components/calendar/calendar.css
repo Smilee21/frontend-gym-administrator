@@ -1,22 +1,73 @@
-.rbc-month-row
-  .rbc-row-bg
-  .rbc-day-bg
-  .rbc-day-bg
-  .rbc-off-range-bg
-  .rbc-row-content {
-  min-width: 700px;
-}
-
-.rbc-date-cell {
+.day-column {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: auto;
 }
 
-.rbc-row-bg .rbc-day-bg {
-  gap: 9px;
-  margin-bottom: 10px;
+.day-container-column {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
-.rbc-month-row {
-  margin-bottom: 12px;
+.card-day {
+  height: 20%;
+  color: black;
+  padding: 50px 20px;
+  background: #fff;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.full-day-card {
+  position: relative;
+  color: white;
+  background: #fff;
+  cursor: not-allowed;
+}
+
+.card-day:hover {
+  position: relative;
+  color: white;
+  background: #fff;
+}
+
+.card-day:hover::before {
+  content: '';
+  position: absolute;
+  color: #fff;
+  background: #000;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.card-day:active {
+  background: #c5c5c5;
+  transform: scale(0.95);
+}
+
+.full-day-card::before {
+  content: '';
+  position: absolute;
+  color: #fff;
+  background: #000;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.full-day-card:hover {
+  background: #fff;
+}
+
+.full-day-card:active {
+  background: #fff;
+  transform: scale(1);
 }
