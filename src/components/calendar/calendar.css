@@ -8,9 +8,9 @@
 
 .day-container-column {
   display: grid;
-  gap: 16px;
+  gap: 5px;
   padding: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 
 .card-day {
@@ -21,18 +21,20 @@
   border: 1px solid black;
   cursor: pointer;
   transition: transform 0.1s ease;
+  z-index: 40;
 }
 
 .full-day-card {
   position: relative;
-  color: white;
-  background: #fff;
+  color: rgb(255, 255, 255);
+  background: #ffffff;
   cursor: not-allowed;
+  z-index: 40;
 }
 
 .card-day:hover {
   position: relative;
-  color: white;
+  color: #fff;
   background: #fff;
 }
 
@@ -45,6 +47,7 @@
   left: 10px;
   right: 10px;
   bottom: 10px;
+  z-index: -10;
 }
 
 .card-day:active {
@@ -64,10 +67,12 @@
 }
 
 .full-day-card:hover {
+  color: #fff;
   background: #fff;
 }
 
 .full-day-card:active {
+  color: #fff;
   background: #fff;
   transform: scale(1);
 }
