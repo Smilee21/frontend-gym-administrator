@@ -1,5 +1,5 @@
 import './calendar.css'
-import { ITrainingSessions, ITrainer } from '@/interfaces/training-sessions'
+import { ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { useEffect, useState } from 'react'
 import { formatHour } from '@/lib/utils'
 
@@ -9,7 +9,9 @@ export default function DayColumn() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/training-session')
+        const response = await fetch(
+          `${process.env.NEXTAUTH_URL}/training-session`
+        )
         const result: ITrainingSessions[] = await response.json()
         setData(result)
       } catch (error) {
