@@ -9,9 +9,7 @@ export default function DayColumn() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXTAUTH_URL}/training-session`
-        )
+        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}`)
         const result: ITrainingSessions[] = await response.json()
         setData(result)
       } catch (error) {

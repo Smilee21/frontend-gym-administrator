@@ -1,8 +1,10 @@
-import type { Metadata } from 'next'
+'use client'
 import localFont from 'next/font/local'
 import TopNavigation from '@/components/top-nav'
-
+import '@/config/amplify-auth'
+import '@aws-amplify/ui-react/styles.css'
 import './globals.css'
+import { Authenticator } from '@aws-amplify/ui-react'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -15,11 +17,6 @@ const geistMono = localFont({
   weight: '100 900',
 })
 
-export const metadata: Metadata = {
-  title: 'fit101',
-  description: 'Gym Experience',
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +28,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TopNavigation />
-        <div className="pt-24 mx-24">{children}</div>
+        <Authenticator.Provider>
+          <div className="pt-24 mx-24">{children}</div>
+        </Authenticator.Provider>
       </body>
     </html>
   )
