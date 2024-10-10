@@ -10,20 +10,14 @@ import {
 import { Button } from '@/components/ui/button'
 import { Edit, Trash2, Plus } from 'lucide-react'
 import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
-import { FormEditSessionModal } from '@/components/forms/FormEditSessionModal'
-import React, { useState } from 'react'
-import { FormCreateSessionModal } from '../forms/FormCreateSessionModal'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 function TableTrainingSessions() {
-  const [openEdit, setOpenEdit] = React.useState(false)
-  const [openCreate, setOpenCreate] = React.useState(false)
-
   const [sessions, setSessions] = useState<ITrainingSessions[]>()
-
   const [selectedTrainer, setSelectedTrainer] = useState<ITrainer | null>(null)
-  const [selectedSession, setSelectedSession] =
-    useState<ITrainingSessions | null>(null)
 
+  const router = useRouter()
   const fetchData = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}`)
@@ -34,24 +28,21 @@ function TableTrainingSessions() {
     }
   }
 
-  fetchData()
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-  const createTrainingSession = () => {
-    setOpenCreate(true)
-  }
+  const createTrainingSession = () => {}
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number | null) => {
     console.log(`Deleting session ${id}`)
-    // Implement delete functionality here
   }
 
-  const handleEdit = (session: ITrainingSessions | string | null) => {
-    if (typeof session === 'object' && session !== null) {
-      setSelectedSession(session)
-      console.log(selectedSession)
-      setOpenEdit(true)
+  const handleEdit = (id: number | null) => {
+    if (id) {
+      router.push(`trainers/training-session/edit/${id}`)
     } else {
-      console.log(`No detailed info available for trainer: ${session}`)
+      console.log(`No detailed info available for trainer: ${id}`)
     }
   }
 
@@ -94,8 +85,12 @@ function TableTrainingSessions() {
           {sessions?.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>
-              <TableCell>{new Date(item.updateAt).toLocaleString()}</TableCell>
+              <TableCell>
+                {new Date(item?.createdAt || '').toLocaleString()}
+              </TableCell>
+              <TableCell>
+                {new Date(item?.updateAt || '').toLocaleString()}
+              </TableCell>
               <TableCell>{item.day}</TableCell>
               <TableCell>{item.hour}</TableCell>
               <TableCell>{item.spaces}</TableCell>
@@ -103,7 +98,7 @@ function TableTrainingSessions() {
               <TableCell>
                 {item.trainer ? (
                   <button
-                    onClick={() => handleViewTrainer(item.trainer)}
+                    onClick={() => handleViewTrainer(item?.trainer ?? null)}
                     className="text-blue-600 hover:underline focus:outline-none"
                   >
                     {item.trainer.name}
@@ -117,7 +112,7 @@ function TableTrainingSessions() {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleEdit(item)}
+                    onClick={() => handleEdit(item?.id ?? null)}
                   >
                     <Edit className="h-4 w-4" color="blue" />
                     <span className="sr-only">Edit</span>
@@ -125,7 +120,7 @@ function TableTrainingSessions() {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item?.id ?? null)}
                   >
                     <Trash2 className="h-4 w-4" color="red" />
                     <span className="sr-only">Delete</span>
@@ -136,13 +131,6 @@ function TableTrainingSessions() {
           ))}
         </TableBody>
       </Table>
-      <FormCreateSessionModal open={openCreate} onOpenChange={setOpenCreate} />
-
-      <FormEditSessionModal
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        sessionData={selectedSession}
-      />
     </div>
   )
 }
