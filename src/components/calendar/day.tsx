@@ -26,13 +26,17 @@ export default function DayColumn() {
 
   type DaysGrouped = { [key: string]: ITrainingSessions[] }
 
-  // Agrupar las sesiones por día
   const daysGrouped: DaysGrouped = data.reduce((acc: DaysGrouped, info) => {
-    acc[info.day] = acc[info.day] ? [...acc[info.day], info] : [info]
+    const dayKey = info.day // Obtiene el valor de info.day
+
+    // Verifica si dayKey es una cadena válida
+    if (dayKey) {
+      acc[dayKey] = acc[dayKey] ? [...acc[dayKey], info] : [info]
+    }
+
     return acc
   }, {})
 
-  // Renderizar
   return (
     <div className="day-container-column">
       {Object.entries(daysGrouped).map(([day, classes]) => (
@@ -43,19 +47,29 @@ export default function DayColumn() {
           {classes.map((info) => (
             <article
               className={
-                info.spaces > 0 ? 'card-day' : 'card-day full-day-card'
+                (info?.spaces ?? 0) > 0 ? 'card-day' : 'card-day full-day-card'
               }
-              onClick={() => handleClick(info.id)}
+              onClick={() => {
+                if (info.id !== undefined) {
+                  handleClick(info.id)
+                } else {
+                  console.warn('ID is undefined')
+                }
+              }}
               key={info.id}
             >
               <div className="z-100 relative flex flex-col items-center justify-center gap-10">
                 <header className="top-[-15px] relative">
-                  <h3>{formatHour(info.hour)}</h3>
+                  <h3>
+                    {info.hour ? formatHour(info.hour) : 'Hour Not Available'}
+                  </h3>
                 </header>
                 <section className="flex flex-col items-center gap-2">
                   <p>{info.trainer?.name || 'Not Assigned'}</p>
                   <span>
-                    {info.spaces > 0 ? 'Available: ' + info.spaces : 'FULL DAY'}
+                    {(info.spaces ?? 0) > 0
+                      ? 'Available: ' + (info.spaces ?? 0)
+                      : 'FULL DAY'}
                   </span>
                 </section>
               </div>
