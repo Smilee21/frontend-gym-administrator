@@ -1,7 +1,8 @@
 import { ITrainingSessions } from '@/interfaces/training-sessions'
+const URL = `${process.env.NEXT_PUBLIC_URL}`
 
 export async function editTrainingSession(id: string, data: ITrainingSessions) {
-  const res = await fetch(`http://localhost:3000/training-session/${id}`, {
+  const res = await fetch(URL + `/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +15,7 @@ export async function editTrainingSession(id: string, data: ITrainingSessions) {
 }
 
 export async function createTrainingSession(data: ITrainingSessions) {
-  const res = await fetch(`http://localhost:3000/training-session`, {
+  const res = await fetch(`${URL}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

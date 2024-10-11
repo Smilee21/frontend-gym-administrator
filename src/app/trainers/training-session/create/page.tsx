@@ -50,6 +50,7 @@ export default function CreateTrainingSession({
   }, [params.id])
 
   const onSubmit = handleSubmit((data) => {
+    console.log(data)
     createTrainingSession(data)
   })
 
