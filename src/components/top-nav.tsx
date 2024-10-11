@@ -14,12 +14,12 @@ export default function TopNavigation() {
       <NavigationMenu className="self-center text-lg">
         <NavigationMenuList className="flex gap-8">
           <NavigationMenuItem>
-            <Link href="/" legacyBehavior passHref prefetch={false}>
+            <Link href="/" legacyBehavior passHref>
               <NavigationMenuLink className="">Home</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/trainers" legacyBehavior passHref prefetch={false}>
+            <Link href="/trainers" legacyBehavior passHref>
               <NavigationMenuLink className="">Trainers</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

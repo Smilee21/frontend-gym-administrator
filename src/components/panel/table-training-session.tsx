@@ -7,17 +7,15 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { Button } from '@/components/ui/button'
 import { Edit, Trash2, Plus } from 'lucide-react'
 import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
-function TableTrainingSessions() {
+export default function TableTrainingSessions() {
   const [sessions, setSessions] = useState<ITrainingSessions[]>()
   const [selectedTrainer, setSelectedTrainer] = useState<ITrainer | null>(null)
 
-  const router = useRouter()
   const fetchData = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}`)
@@ -31,22 +29,6 @@ function TableTrainingSessions() {
   useEffect(() => {
     fetchData()
   }, [])
-
-  const handleCreate = () => {
-    router.push('trainers/training-session/create')
-  }
-
-  const handleDelete = (id: number | null) => {
-    console.log(`Deleting session ${id}`)
-  }
-
-  const handleEdit = (id: number | null) => {
-    if (id) {
-      router.push(`trainers/training-session/edit/${id}`)
-    } else {
-      console.log(`No detailed info available for trainer: ${id}`)
-    }
-  }
 
   const handleViewTrainer = (trainer: ITrainer | string | null) => {
     if (typeof trainer === 'object' && trainer !== null) {
@@ -75,14 +57,12 @@ function TableTrainingSessions() {
             <TableHead>Trainer</TableHead>
             <TableHead>Actions</TableHead>
             <TableHeader>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handleCreate()}
+              <Link
+                href={'training-session/create'}
+                className="p-1 flex justify-center items-center hover:bg-slate-200 active:bg-slate-300 border-[1px] border-solid border-gray-400 shadow-md rounded-sm"
               >
                 <Plus className="h-4 w-4" color="green" />
-                <span className="sr-only">Create</span>
-              </Button>
+              </Link>
             </TableHeader>
           </TableRow>
         </TableHeader>
@@ -114,22 +94,18 @@ function TableTrainingSessions() {
               </TableCell>
               <TableCell>
                 <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleEdit(item?.id ?? null)}
+                  <Link
+                    href={`training-session/edit/${item.id}`}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
                   >
-                    <Edit className="h-4 w-4" color="blue" />
-                    <span className="sr-only">Edit</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleDelete(item?.id ?? null)}
+                    <Edit className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href={`trainers/delete/${item.id}`}
+                    className="bg-red-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded inline-flex items-center"
                   >
-                    <Trash2 className="h-4 w-4" color="red" />
-                    <span className="sr-only">Delete</span>
-                  </Button>
+                    <Trash2 className="h-4 w-4" color="black" />
+                  </Link>
                 </div>
               </TableCell>
             </TableRow>
@@ -139,5 +115,3 @@ function TableTrainingSessions() {
     </div>
   )
 }
-
-export default TableTrainingSessions

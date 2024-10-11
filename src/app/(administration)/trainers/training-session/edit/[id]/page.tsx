@@ -25,7 +25,7 @@ import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { editTrainingSession } from '@/app/trainers/training-session.api'
+import { editTrainingSession } from '../../../training-session.api'
 import { useRouter } from 'next/navigation'
 export default function EditTrainingSession({
   params,
