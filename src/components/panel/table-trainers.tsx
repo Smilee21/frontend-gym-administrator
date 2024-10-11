@@ -9,20 +9,19 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { Edit, Trash2, Plus } from 'lucide-react'
-import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
+import { ITrainer } from '@/interfaces/training-sessions'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-function TableTrainingSessions() {
-  const [sessions, setSessions] = useState<ITrainingSessions[]>()
-  const [selectedTrainer, setSelectedTrainer] = useState<ITrainer | null>(null)
+function TableTrainers() {
+  const [trainer, setTrainer] = useState<ITrainer[]>()
 
   const router = useRouter()
   const fetchData = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}`)
-      const result: ITrainingSessions[] = await response.json()
-      setSessions(result)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`)
+      const result: ITrainer[] = await response.json()
+      setTrainer(result)
     } catch (error) {
       console.error('Error fetching data:', error)
     }
@@ -32,8 +31,8 @@ function TableTrainingSessions() {
     fetchData()
   }, [])
 
-  const handleCreate = () => {
-    router.push('trainers/training-session/create')
+  const createTrainer = () => {
+    router.push('/trainers/create')
   }
 
   const handleDelete = (id: number | null) => {
@@ -42,76 +41,44 @@ function TableTrainingSessions() {
 
   const handleEdit = (id: number | null) => {
     if (id) {
-      router.push(`trainers/training-session/edit/${id}`)
+      router.push(`trainers/edit/${id}`)
     } else {
       console.log(`No detailed info available for trainer: ${id}`)
-    }
-  }
-
-  const handleViewTrainer = (trainer: ITrainer | string | null) => {
-    if (typeof trainer === 'object' && trainer !== null) {
-      setSelectedTrainer(trainer)
-      console.log(selectedTrainer)
-    } else {
-      console.log(`No detailed info available for trainer: ${trainer}`)
     }
   }
 
   return (
     <div className="container mx-auto">
       <header className="flex justify-center mb-7 font-mono text-3xl">
-        <h2>Training Sessions</h2>
+        <h2>Trainers</h2>
       </header>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Updated At</TableHead>
-            <TableHead>Day</TableHead>
-            <TableHead>Hour</TableHead>
-            <TableHead>Spaces</TableHead>
-            <TableHead>Duration</TableHead>
-            <TableHead>Trainer</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Specialty</TableHead>
+            <TableHead>Contact Info</TableHead>
             <TableHead>Actions</TableHead>
             <TableHeader>
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => handleCreate()}
+                onClick={() => createTrainer()}
               >
                 <Plus className="h-4 w-4" color="green" />
-                <span className="sr-only">Create</span>
+                <span className="sr-only">Edit</span>
               </Button>
             </TableHeader>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sessions?.map((item) => (
+          {trainer?.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>
-                {new Date(item?.createdAt || '').toLocaleString()}
-              </TableCell>
-              <TableCell>
-                {new Date(item?.updateAt || '').toLocaleString()}
-              </TableCell>
-              <TableCell>{item.day}</TableCell>
-              <TableCell>{item.hour}</TableCell>
-              <TableCell>{item.spaces}</TableCell>
-              <TableCell>{item.duration}</TableCell>
-              <TableCell>
-                {item.trainer ? (
-                  <button
-                    onClick={() => handleViewTrainer(item?.trainer ?? null)}
-                    className="text-blue-600 hover:underline focus:outline-none"
-                  >
-                    {item.trainer.name}
-                  </button>
-                ) : (
-                  'No trainer assigned'
-                )}
-              </TableCell>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.specialty}</TableCell>
+              <TableCell>{item.contactInfo}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
                   <Button
@@ -140,4 +107,4 @@ function TableTrainingSessions() {
   )
 }
 
-export default TableTrainingSessions
+export default TableTrainers

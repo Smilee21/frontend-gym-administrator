@@ -1,7 +1,5 @@
 'use client'
-/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react'
-
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -21,23 +19,21 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
+import { ITrainer } from '@/interfaces/training-sessions'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { editTrainingSession } from '@/app/trainers/training-session.api'
+import { createTrainingSession } from '../../training-session.api'
 import { useRouter } from 'next/navigation'
-export default function EditTrainingSession({
+
+export default function CreateTrainingSession({
   params,
 }: {
   params: { id: string }
 }) {
-  const [session, setSession] = useState<ITrainingSessions | null>(null)
   const [trainers, setTrainers] = useState<ITrainer[] | null>(null)
+  const { register, handleSubmit, setValue } = useForm()
   const router = useRouter()
-  const { register, handleSubmit, setValue } = useForm({
-    defaultValues: async () => await getTrainingSession(),
-  })
 
   const getTrainers = async () => {
     try {
@@ -49,25 +45,12 @@ export default function EditTrainingSession({
     }
   }
 
-  const getTrainingSession = async () => {
-    const URL = process.env.NEXT_PUBLIC_URL
-
-    try {
-      const response = await fetch(`${URL}/` + params.id)
-      const result: ITrainingSessions = await response.json()
-      setSession(result)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-
   useEffect(() => {
-    getTrainingSession()
     getTrainers()
   }, [params.id])
 
   const onSubmit = handleSubmit((data) => {
-    editTrainingSession(params.id, data)
+    createTrainingSession(data)
   })
 
   const handleBack = () => {
@@ -91,7 +74,6 @@ export default function EditTrainingSession({
                     id="day"
                     placeholder="Name of your project"
                     {...register('day')}
-                    defaultValue={session?.day}
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
@@ -100,7 +82,6 @@ export default function EditTrainingSession({
                     id="hour"
                     {...register('hour')}
                     placeholder="Name of your project"
-                    defaultValue={session?.hour}
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
@@ -109,7 +90,6 @@ export default function EditTrainingSession({
                     id="duration"
                     {...register('duration')}
                     placeholder="Name of your project"
-                    defaultValue={session?.duration}
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
@@ -119,7 +99,6 @@ export default function EditTrainingSession({
                     type="number"
                     {...register('spaces')}
                     placeholder="Name of your project"
-                    defaultValue={session?.spaces}
                   />
                 </div>
 
@@ -127,7 +106,6 @@ export default function EditTrainingSession({
                   <Label htmlFor="trainerId">Trainer</Label>
                   <Select
                     onValueChange={(value) => setValue('trainerId', value)}
-                    defaultValue={session?.trainer?.id?.toLocaleString()}
                   >
                     <SelectTrigger id="trainerId">
                       <SelectValue placeholder="Select" />

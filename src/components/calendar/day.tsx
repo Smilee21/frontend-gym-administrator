@@ -27,9 +27,8 @@ export default function DayColumn() {
   type DaysGrouped = { [key: string]: ITrainingSessions[] }
 
   const daysGrouped: DaysGrouped = data.reduce((acc: DaysGrouped, info) => {
-    const dayKey = info.day // Obtiene el valor de info.day
+    const dayKey = info.day
 
-    // Verifica si dayKey es una cadena válida
     if (dayKey) {
       acc[dayKey] = acc[dayKey] ? [...acc[dayKey], info] : [info]
     }
@@ -37,14 +36,28 @@ export default function DayColumn() {
     return acc
   }, {})
 
+  const weekOrder = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]
+
+  const sortedDays = Object.keys(daysGrouped).sort(
+    (a, b) => weekOrder.indexOf(a) - weekOrder.indexOf(b)
+  )
+
   return (
-    <div className="day-container-column">
-      {Object.entries(daysGrouped).map(([day, classes]) => (
+    <div className="day-container-column font-protest ">
+      {sortedDays.map((day) => (
         <section className="day-column" key={day}>
-          <header className="flex justify-center">
+          <header className="flex justify-center bg-black py-2 text-white   ">
             <h3>{day}</h3>
           </header>
-          {classes.map((info) => (
+          {daysGrouped[day].map((info) => (
             <article
               className={
                 (info?.spaces ?? 0) > 0 ? 'card-day' : 'card-day full-day-card'
@@ -60,11 +73,11 @@ export default function DayColumn() {
             >
               <div className="z-100 relative flex flex-col items-center justify-center gap-10">
                 <header className="top-[-15px] relative">
-                  <h3>
+                  <h3 className="text-4xl">
                     {info.hour ? formatHour(info.hour) : 'Hour Not Available'}
                   </h3>
                 </header>
-                <section className="flex flex-col items-center gap-2">
+                <section className="flex flex-col items-center gap-2 text-lg">
                   <p>{info.trainer?.name || 'Not Assigned'}</p>
                   <span>
                     {(info.spaces ?? 0) > 0
