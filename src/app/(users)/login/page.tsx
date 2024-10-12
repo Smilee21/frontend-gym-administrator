@@ -1,14 +1,26 @@
 'use client'
+import { useEffect } from 'react'
 import { Authenticator } from '@aws-amplify/ui-react'
+import { useRouter } from 'next/navigation'
+import { fetchAuthSession } from 'aws-amplify/auth'
 
 export default function Login() {
-  return (
-    <Authenticator>
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <article className="flex flex-col gap-8">
-          <span></span>
-        </article>
-      </div>
-    </Authenticator>
-  )
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkUserLoggedIn = async () => {
+      try {
+        const session = await fetchAuthSession()
+        if (session && session.tokens) {
+          router.push('/')
+        }
+      } catch (error) {
+        console.error('Error fetching session:', error)
+      }
+    }
+
+    checkUserLoggedIn()
+  }, [router])
+
+  return <Authenticator />
 }
