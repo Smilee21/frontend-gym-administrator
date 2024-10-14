@@ -8,39 +8,52 @@ export async function middleware(request: NextRequest) {
   const authenticated = await runWithAmplifyServerContext({
     nextServerContext: { request, response },
     operation: async (contextSpec) => {
+      const pass = {
+        isUser: false,
+        isAdmin: false,
+      }
+
       try {
         const session = await fetchAuthSession(contextSpec)
 
         const rolesToCheck = ['Admin', 'Trainer']
         const groups = session.tokens?.idToken?.payload['cognito:groups']
         const isUser = session.tokens?.idToken !== undefined
+        pass.isUser = isUser
 
         const userGroups: string[] = Array.isArray(groups)
           ? (groups as string[])
           : []
 
         if (request.nextUrl.pathname.startsWith('/trainers')) {
-          const hasAccess = rolesToCheck.some((role) =>
-            userGroups.includes(role)
-          )
-          if (hasAccess) {
-            return response
-          }
-
-          return isUser
+          const isAdmin = rolesToCheck.some((role) => userGroups.includes(role))
+          pass.isAdmin = isAdmin
         }
+
+        return pass
       } catch (error) {
         console.log(error)
-        return false
+        pass.isUser = false
+        pass.isAdmin = false
+
+        return pass
       }
     },
   })
 
-  if (authenticated) {
+  if (!authenticated.isUser && !authenticated.isAdmin) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (authenticated.isAdmin) {
+    return response
+  }
+
+  if (authenticated.isUser) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  return NextResponse.redirect(new URL('/login', request.url))
+  return
 }
 
 export const config = {
