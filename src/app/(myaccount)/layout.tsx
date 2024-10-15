@@ -2,9 +2,9 @@
 import localFont from 'next/font/local'
 import '@/config/amplify-auth'
 import '@aws-amplify/ui-react/styles.css'
-import '../globals.css'
+import '../../app/globals.css'
 import { Authenticator } from '@aws-amplify/ui-react'
-import Sidebar from '@/components/sidebars/sidebar'
+import UserSidebar from '@/components/sidebars/userSidebar'
 
 const geistMono = localFont({
   src: '../fonts/GeistMonoVF.woff',
@@ -31,7 +31,7 @@ export default function RootLayout({
 `}
       >
         <Authenticator.Provider>
-          <Sidebar />
+          <UserSidebar />
           <div className="">{children}</div>
         </Authenticator.Provider>
       </body>

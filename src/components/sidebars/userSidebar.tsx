@@ -6,20 +6,24 @@ import { usePathname } from 'next/navigation'
 
 const LINKS = [
   {
-    name: 'Trainers',
-    href: '/trainers',
+    name: 'Account',
+    href: '/myaccount',
   },
   {
-    name: 'Training Session',
-    href: '/trainers/training-session',
+    name: 'My Classes',
+    href: '/classes',
+  },
+  {
+    name: 'My Membership',
+    href: '/membership',
   },
 ]
 
-export default function Sidebar() {
+export default function UserSidebar() {
   const pathname = usePathname()
 
   return (
-    <section className="flex flex-col h-[70%] w-auto mb-7 mt-0 py-10 px-12 z-50 font-protest bg-white bg-opacity-15  backdrop-blur-lg relative gap-12 items-center">
+    <section className="flex flex-col h-[100%] w-auto mb-7 mt-0 py-10 px-12 z-50 font-protest bg-white bg-opacity-15 border-2  backdrop-blur-lg relative gap-12 items-center">
       <h2 className="text-5xl">FIT101</h2>
       <section className="flex flex-col justify-center items-center text-center gap-7">
         {LINKS.map((link) => (
