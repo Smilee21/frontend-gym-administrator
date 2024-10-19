@@ -3,7 +3,14 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  background-image: linear-gradient(
+    to right bottom,
+    #dadada,
+    #e1e1e2,
+    #e8e7e9,
+    #efeef1,
+    #f6f4f8
+  );
 }
 
 @layer utilities {

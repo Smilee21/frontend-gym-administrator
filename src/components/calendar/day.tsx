@@ -2,9 +2,16 @@ import './calendar.css'
 import { ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { useEffect, useState } from 'react'
 import { formatHour } from '@/lib/utils'
+import { DialogComponent } from '../Dialog/dialog'
+import { useDialog } from '@/hooks/useDialog'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
 export default function DayColumn() {
   const [data, setData] = useState<ITrainingSessions[]>([])
+  const { onOpen } = useDialog()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { replace } = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,13 +27,30 @@ export default function DayColumn() {
     fetchData()
   }, [])
 
-  const handleClick = (id: number) => {
-    console.log(id)
+  const handleClick = async ({
+    id,
+    spaces,
+  }: {
+    id: number
+    spaces: number | undefined
+  }) => {
+    const params = new URLSearchParams(searchParams)
+
+    if (id && spaces) {
+      params.set('training-session', id.toLocaleString())
+      params.set('spaces', spaces?.toLocaleString())
+    } else {
+      params.delete('training-session')
+    }
+
+    replace(`${pathname}?${params.toString()}`)
+
+    onOpen()
   }
 
   type DaysGrouped = { [key: string]: ITrainingSessions[] }
 
-  const daysGrouped: DaysGrouped = data.reduce((acc: DaysGrouped, info) => {
+  const daysGrouped: DaysGrouped = data?.reduce((acc: DaysGrouped, info) => {
     const dayKey = info.day
 
     if (dayKey) {
@@ -63,8 +87,12 @@ export default function DayColumn() {
                 (info?.spaces ?? 0) > 0 ? 'card-day' : 'card-day full-day-card'
               }
               onClick={() => {
-                if (info.id !== undefined) {
-                  handleClick(info.id)
+                if (
+                  info.id !== undefined &&
+                  info.spaces !== undefined &&
+                  info.spaces > 0
+                ) {
+                  handleClick({ id: info.id, spaces: info.spaces })
                 } else {
                   console.warn('ID is undefined')
                 }
@@ -90,6 +118,7 @@ export default function DayColumn() {
           ))}
         </section>
       ))}
+      <DialogComponent></DialogComponent>
     </div>
   )
 }

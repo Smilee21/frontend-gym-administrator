@@ -16,6 +16,13 @@ export async function middleware(request: NextRequest) {
       try {
         const session = await fetchAuthSession(contextSpec)
 
+        if (session.tokens?.idToken) {
+          response.headers.set(
+            'Authorization',
+            `Bearer ${session.tokens.idToken}`
+          )
+        }
+
         const groups = session.tokens?.idToken?.payload['cognito:groups'] || []
 
         const userGroups: string[] = Array.isArray(groups)

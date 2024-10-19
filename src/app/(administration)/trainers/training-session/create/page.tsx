@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { createTrainingSession } from '../../training-session.api'
 import { useRouter } from 'next/navigation'
+import { fetchAuthSession } from 'aws-amplify/auth'
 
 export default function CreateTrainingSession({
   params,
@@ -36,8 +37,16 @@ export default function CreateTrainingSession({
   const router = useRouter()
 
   const getTrainers = async () => {
+    const token = await fetchAuthSession()
+    const idToken = token.tokens?.idToken
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
       const result: ITrainer[] = await response.json()
       setTrainers(result)
     } catch (error) {
@@ -59,7 +68,7 @@ export default function CreateTrainingSession({
   }
 
   return (
-    <Authenticator>
+    <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
       <div>
         <Card className="w-[350px]">
           <CardHeader>

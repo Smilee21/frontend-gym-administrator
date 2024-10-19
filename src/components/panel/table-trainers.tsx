@@ -30,8 +30,8 @@ function TableTrainers() {
   }, [])
 
   return (
-    <div className="container mx-auto">
-      <header className="flex justify-center mb-7 font-mono text-3xl">
+    <div className="container flex flex-col justify-center gap-2 mx-auto w-[80%]">
+      <header className="font-protest text-3xl flex flex-row justify-center w-[100%] self-center border border-white rounded-sm  bg-black text-white p-3 shadow-lg">
         <h2>Trainers</h2>
       </header>
       <Table>

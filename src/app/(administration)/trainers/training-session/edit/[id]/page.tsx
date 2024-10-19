@@ -27,6 +27,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { editTrainingSession } from '../../../training-session.api'
 import { useRouter } from 'next/navigation'
+import { fetchAuthSession } from 'aws-amplify/auth'
 export default function EditTrainingSession({
   params,
 }: {
@@ -40,8 +41,17 @@ export default function EditTrainingSession({
   })
 
   const getTrainers = async () => {
+    const token = await fetchAuthSession()
+    const idToken = token.tokens?.idToken
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${idToken}`, // Agrega el token en la cabecera
+          'Content-Type': 'application/json',
+        },
+      })
       const result: ITrainer[] = await response.json()
       setTrainers(result)
     } catch (error) {
@@ -51,9 +61,17 @@ export default function EditTrainingSession({
 
   const getTrainingSession = async () => {
     const URL = process.env.NEXT_PUBLIC_URL
+    const token = await fetchAuthSession()
+    const idToken = token.tokens?.idToken
 
     try {
-      const response = await fetch(`${URL}/` + params.id)
+      const response = await fetch(`${URL}/` + params.id, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
       const result: ITrainingSessions = await response.json()
       setSession(result)
     } catch (error) {
@@ -75,7 +93,7 @@ export default function EditTrainingSession({
   }
 
   return (
-    <Authenticator>
+    <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
       <div>
         <Card className="w-[350px]">
           <CardHeader>

@@ -31,7 +31,7 @@ export default function CreateTrainer() {
   }
 
   return (
-    <Authenticator>
+    <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
       <div className="flex justify-center mb-12">
         <Card className="w-[500px]">
           <CardHeader>

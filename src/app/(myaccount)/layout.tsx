@@ -31,8 +31,12 @@ export default function RootLayout({
 `}
       >
         <Authenticator.Provider>
-          <UserSidebar />
-          <div className="">{children}</div>
+          <div className="flex flex-row">
+            <UserSidebar />
+            <div className="grid grid-cols-1 absolute items-center justify-center w-[100%]">
+              {children}
+            </div>
+          </div>
         </Authenticator.Provider>
       </body>
     </html>

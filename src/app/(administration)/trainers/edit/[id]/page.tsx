@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form'
 import { editTrainer } from '../../trainer.api'
 import { ITrainer } from '@/interfaces/training-sessions'
 import { useRouter } from 'next/navigation'
+import { fetchAuthSession } from 'aws-amplify/auth'
 
 export default function EditTrainer({ params }: { params: { id: string } }) {
   const [, setTrainer] = useState<ITrainer | null>({})
@@ -31,9 +32,17 @@ export default function EditTrainer({ params }: { params: { id: string } }) {
 
   const fetchData = async () => {
     const URL = `${process.env.NEXT_PUBLIC_TRAINERS}`
+    const token = await fetchAuthSession()
+    const idToken = token.tokens?.idToken
 
     try {
-      const response = await fetch(URL + `/${params.id}`)
+      const response = await fetch(URL + `/${params.id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
       const result: ITrainer[] = await response.json()
       const res = result[0]
       setTrainer(res)
@@ -53,7 +62,7 @@ export default function EditTrainer({ params }: { params: { id: string } }) {
   })
 
   return (
-    <Authenticator>
+    <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
       <div className="flex justify-center mb-12">
         <Card className="w-[500px]">
           <CardHeader>
