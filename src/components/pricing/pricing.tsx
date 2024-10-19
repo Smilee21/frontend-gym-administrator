@@ -98,7 +98,7 @@ export default function Princing() {
           </article>
         ))}
       </section>
-      <DialogComponentSuscribe></DialogComponentSuscribe>
+      <DialogComponentSuscribe />
     </section>
   )
 }

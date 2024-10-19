@@ -1,12 +1,13 @@
+'use client'
 import './calendar.css'
 import { ITrainingSessions } from '@/interfaces/training-sessions'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { formatHour } from '@/lib/utils'
 import { DialogComponent } from '../Dialog/dialog'
 import { useDialog } from '@/hooks/useDialog'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
-export default function DayColumn() {
+function DayColumnContent() {
   const [data, setData] = useState<ITrainingSessions[]>([])
   const { onOpen } = useDialog()
   const pathname = usePathname()
@@ -44,7 +45,6 @@ export default function DayColumn() {
     }
 
     replace(`${pathname}?${params.toString()}`)
-
     onOpen()
   }
 
@@ -52,11 +52,9 @@ export default function DayColumn() {
 
   const daysGrouped: DaysGrouped = data?.reduce((acc: DaysGrouped, info) => {
     const dayKey = info.day
-
     if (dayKey) {
       acc[dayKey] = acc[dayKey] ? [...acc[dayKey], info] : [info]
     }
-
     return acc
   }, {})
 
@@ -75,10 +73,10 @@ export default function DayColumn() {
   )
 
   return (
-    <div className="day-container-column font-protest ">
+    <div className="day-container-column font-protest">
       {sortedDays.map((day) => (
         <section className="day-column" key={day}>
-          <header className="flex justify-center bg-black py-2 text-white   ">
+          <header className="flex justify-center bg-black py-2 text-white">
             <h3>{day}</h3>
           </header>
           {daysGrouped[day].map((info) => (
@@ -118,7 +116,15 @@ export default function DayColumn() {
           ))}
         </section>
       ))}
-      <DialogComponent></DialogComponent>
+      <DialogComponent />
     </div>
+  )
+}
+
+export default function DayColumn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DayColumnContent />
+    </Suspense>
   )
 }
