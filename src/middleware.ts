@@ -5,7 +5,7 @@ import { runWithAmplifyServerContext } from '@/utils/amplify-server-util'
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
-  runWithAmplifyServerContext({
+  return runWithAmplifyServerContext({
     nextServerContext: { request, response },
     operation: async (contextSpec) => {
       const pass = {
@@ -33,12 +33,22 @@ export async function middleware(request: NextRequest) {
           pass.isAdmin =
             userGroups.includes('Admin') || userGroups.includes('Trainer')
 
-          if (pass.isAdmin) NextResponse.next()
+          console.log('entra enlo de trainers')
+
+          if (pass.isAdmin) {
+            console.log(pass.isAdmin)
+            return NextResponse.next()
+          } else {
+            console.log('hola bro jajaj else')
+            return NextResponse.redirect(new URL('/myaccount', request.url))
+          }
         }
 
         if (request.nextUrl.pathname.startsWith('/myaccount')) {
+          console.log('myaccountadsasdas')
+
           pass.isUser = !!session.tokens?.idToken
-          if (pass.isUser) NextResponse.next()
+          if (pass.isUser) return NextResponse.next()
         }
 
         NextResponse.redirect(new URL('/', request.url))
