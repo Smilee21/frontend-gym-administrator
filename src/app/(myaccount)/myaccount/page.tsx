@@ -25,7 +25,7 @@ export default function MyAccount() {
   }, [user])
 
   return route === 'authenticated' ? (
-    <Authenticator>
+    <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
       <div className="flex flex-col m-10 gap-4 gap-y-2 ">
         <header className="font-protest text-3xl flex flex-row justify-center w-[80%] self-center border border-white rounded-sm  bg-black text-white p-3 shadow-lg">
           <h3>Your Profile</h3>
@@ -49,7 +49,9 @@ export default function MyAccount() {
     </Authenticator>
   ) : (
     <div className="pt-24">
-      <Authenticator />
+      <Authenticator
+        signUpAttributes={['name', 'family_name', 'phone_number']}
+      />
     </div>
   )
 }
