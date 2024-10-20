@@ -38,9 +38,6 @@ export async function middleware(request: NextRequest) {
           if (pass.isAdmin) {
             console.log(pass.isAdmin)
             return NextResponse.next()
-          } else {
-            console.log('hola bro jajaj else')
-            return NextResponse.redirect(new URL('/myaccount', request.url))
           }
         }
 
@@ -54,7 +51,7 @@ export async function middleware(request: NextRequest) {
         NextResponse.redirect(new URL('/', request.url))
       } catch (error) {
         console.error('Error fetching session:', error)
-        NextResponse.redirect('/')
+        return NextResponse.redirect('/')
       }
     },
   })
