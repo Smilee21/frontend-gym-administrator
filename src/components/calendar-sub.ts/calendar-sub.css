@@ -1,0 +1,78 @@
+.day-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: auto;
+}
+
+.day-container-column {
+  display: grid;
+  gap: 5px;
+  padding: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.card-day {
+  height: auto;
+  color: black;
+  padding: 50px 20px;
+  background: #fff;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  z-index: 40;
+}
+
+.full-day-card {
+  position: relative;
+  color: rgb(255, 255, 255);
+  background: #ffffff;
+  cursor: not-allowed;
+  z-index: 40;
+}
+
+.card-day:hover {
+  position: relative;
+  color: #fff;
+  background: #fff;
+}
+
+.card-day:hover::before {
+  content: '';
+  position: absolute;
+  color: #fff;
+  background: #000;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: -10;
+}
+
+.card-day:active {
+  background: #c5c5c5;
+  transform: scale(0.95);
+}
+
+.full-day-card::before {
+  content: '';
+  position: absolute;
+  color: #fff;
+  background: #000;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.full-day-card:hover {
+  color: #fff;
+  background: #fff;
+}
+
+.full-day-card:active {
+  color: #fff;
+  background: #fff;
+  transform: scale(1);
+}

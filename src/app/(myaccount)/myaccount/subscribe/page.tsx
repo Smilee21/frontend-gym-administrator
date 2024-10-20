@@ -5,10 +5,7 @@ import {
   FetchUserAttributesOutput,
 } from 'aws-amplify/auth'
 import { useEffect, useState } from 'react'
-import UserInfo from './userInfo'
-import UserClasses from '@/components/myaccount/userClasses'
-import UserSubscription from './userSubscription'
-
+import SubscribeOptions from '@/components/subscribeOptions/subscribe-options'
 export default function MyAccount() {
   const [info, setInfo] = useState<FetchUserAttributesOutput | null>(null)
 
@@ -27,21 +24,11 @@ export default function MyAccount() {
 
   return route === 'authenticated' ? (
     <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
-      <div className="flex flex-col m-10 gap-4 gap-y-2 ">
+      <div className="flex flex-col m-10 gap-4 gap-y-2 items-center ">
         <header className="font-protest text-3xl flex flex-row justify-center w-[80%] self-center border border-white rounded-sm  bg-black text-white p-3 shadow-lg">
-          <h3>Your Profile</h3>
+          <h3>Subscription Options</h3>
         </header>
-        {info ? (
-          <div className="flex flex-col gap-4 justify-center items-center">
-            <div className="grid grid-cols-1  md:grid-cols-2 w-[80%] min-h-48 gap-4">
-              <UserInfo user={info}></UserInfo>
-              <UserSubscription user={info}></UserSubscription>
-            </div>
-            <UserClasses></UserClasses>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+        {info ? <SubscribeOptions /> : <p>Loading...</p>}
       </div>
     </Authenticator>
   ) : (

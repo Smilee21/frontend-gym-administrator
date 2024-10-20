@@ -1,5 +1,5 @@
 'use client'
-import './calendar.css'
+import './calendar-sub.css'
 import { ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { Suspense, useEffect, useState } from 'react'
 import { formatHour } from '@/lib/utils'
@@ -121,7 +121,7 @@ function DayColumnContent() {
   )
 }
 
-export default function DayColumn() {
+export default function DayColumnSub() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <DayColumnContent />

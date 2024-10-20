@@ -1,0 +1,11 @@
+.selected {
+  color: #6f09e4;
+  font-size: 1.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: font-size 0.3s ease, text-shadow 0.3s ease;
+}
+
+.no-selected {
+  color: #a8a7a7bb;
+  transition: font-size 0.3s ease, text-shadow 0.3s ease;
+}
