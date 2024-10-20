@@ -28,6 +28,7 @@ import { useForm } from 'react-hook-form'
 import { editTrainingSession } from '../../../training-session.api'
 import { useRouter } from 'next/navigation'
 import { fetchAuthSession } from 'aws-amplify/auth'
+
 export default function EditTrainingSession({
   params,
 }: {
@@ -48,7 +49,7 @@ export default function EditTrainingSession({
       const response = await fetch(`${process.env.NEXT_PUBLIC_TRAINERS}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${idToken}`, // Agrega el token en la cabecera
+          Authorization: `Bearer ${idToken}`,
           'Content-Type': 'application/json',
         },
       })
@@ -94,7 +95,7 @@ export default function EditTrainingSession({
 
   return (
     <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
-      <div>
+      <div className="flex justify-center mt-32">
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Edit Training Session</CardTitle>

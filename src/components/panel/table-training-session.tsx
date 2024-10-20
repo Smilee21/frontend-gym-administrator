@@ -8,13 +8,12 @@ import {
 } from '@/components/ui/table'
 
 import { Edit, Trash2, Plus } from 'lucide-react'
-import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
+import { ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function TableTrainingSessions() {
   const [sessions, setSessions] = useState<ITrainingSessions[]>()
-  const [selectedTrainer, setSelectedTrainer] = useState<ITrainer | null>(null)
 
   const fetchData = async () => {
     try {
@@ -29,15 +28,6 @@ export default function TableTrainingSessions() {
   useEffect(() => {
     fetchData()
   }, [])
-
-  const handleViewTrainer = (trainer: ITrainer | string | null) => {
-    if (typeof trainer === 'object' && trainer !== null) {
-      setSelectedTrainer(trainer)
-      console.log(selectedTrainer)
-    } else {
-      console.log(`No detailed info available for trainer: ${trainer}`)
-    }
-  }
 
   return (
     <div className="container mx-auto w-[80%] flex flex-col gap-4">
@@ -82,14 +72,14 @@ export default function TableTrainingSessions() {
               <TableCell>{item.duration}</TableCell>
               <TableCell>
                 {item.trainer ? (
-                  <button
-                    onClick={() => handleViewTrainer(item?.trainer ?? null)}
-                    className="text-blue-600 hover:underline focus:outline-none"
+                  <Link
+                    className="text-blue-600 hover:text-blue-900 active:to-blue-950 underline"
+                    href={`edit/${item.trainer.id}?id=${item.trainer.id}&name=${item.trainer.name}&specialty=${item.trainer.specialty}&contact=${item.trainer.contactInfo}`}
                   >
                     {item.trainer.name}
-                  </button>
+                  </Link>
                 ) : (
-                  'No trainer assigned'
+                  <span className="text-red-800">No trainer assigned</span>
                 )}
               </TableCell>
               <TableCell>

@@ -1,6 +1,6 @@
 'use client'
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -15,55 +15,35 @@ import { Label } from '@/components/ui/label'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useForm } from 'react-hook-form'
 import { editTrainer } from '../../trainer.api'
-import { ITrainer } from '@/interfaces/training-sessions'
-import { useRouter } from 'next/navigation'
-import { fetchAuthSession } from 'aws-amplify/auth'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function EditTrainer({ params }: { params: { id: string } }) {
-  const [, setTrainer] = useState<ITrainer | null>({})
+export default function EditTrainer() {
+  const searchParams = useSearchParams()
   const router = useRouter()
+  const trainerId = searchParams.get('id')?.toString()
+
   const { register, handleSubmit } = useForm({
-    defaultValues: async () => await fetchData(),
+    defaultValues: {
+      name: searchParams.get('name') || '',
+      specialty: searchParams.get('specialty') || '',
+      contactInfo: searchParams.get('contact') || '',
+    },
   })
 
   const handleBack = () => {
     router.back()
   }
 
-  const fetchData = async () => {
-    const URL = `${process.env.NEXT_PUBLIC_TRAINERS}`
-    const token = await fetchAuthSession()
-    const idToken = token.tokens?.idToken
-
-    try {
-      const response = await fetch(URL + `/${params.id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-          'Content-Type': 'application/json',
-        },
-      })
-      const result: ITrainer[] = await response.json()
-      const res = result[0]
-      setTrainer(res)
-      return res
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [params.id])
-
   const onSubmit = handleSubmit(async (data) => {
-    const resul = await editTrainer(params.id, data)
-    console.log(resul)
+    if (trainerId) {
+      const resul = await editTrainer(trainerId, data)
+      console.log(resul)
+    }
   })
 
   return (
     <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
-      <div className="flex justify-center mb-12">
+      <div className="flex justify-center mt-40">
         <Card className="w-[500px]">
           <CardHeader>
             <CardTitle>Edit Trainer</CardTitle>
