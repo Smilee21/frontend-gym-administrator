@@ -8,11 +8,6 @@ export async function middleware(request: NextRequest) {
   return runWithAmplifyServerContext({
     nextServerContext: { request, response },
     operation: async (contextSpec) => {
-      const pass = {
-        isUser: false,
-        isAdmin: false,
-      }
-
       try {
         const session = await fetchAuthSession(contextSpec)
 
@@ -29,29 +24,35 @@ export async function middleware(request: NextRequest) {
           ? groups.filter((group): group is string => typeof group === 'string')
           : []
 
+        // Verificación para la ruta /trainers
         if (request.nextUrl.pathname.startsWith('/trainers')) {
-          pass.isAdmin =
+          const isAdmin =
             userGroups.includes('Admin') || userGroups.includes('Trainer')
-
-          console.log('entra enlo de trainers')
-
-          if (pass.isAdmin) {
-            console.log(pass.isAdmin)
-            return NextResponse.next()
+          if (!isAdmin) {
+            // Redirige a la página principal si no tiene el rol requerido
+            return NextResponse.redirect(new URL('/myaccount', request.url))
           }
+          // Permitir acceso si es Admin o Trainer
+          return NextResponse.next()
         }
 
+        // Verificación para la ruta /myaccount
         if (request.nextUrl.pathname.startsWith('/myaccount')) {
-          console.log('myaccountadsasdas')
-
-          pass.isUser = !!session.tokens?.idToken
-          if (pass.isUser) return NextResponse.next()
+          const isUser = !!session.tokens?.idToken
+          if (!isUser) {
+            // Redirige a la página principal si no está autenticado
+            return NextResponse.redirect(new URL('/', request.url))
+          }
+          // Permitir acceso si el usuario está autenticado
+          return NextResponse.next()
         }
 
-        NextResponse.redirect(new URL('/', request.url))
+        // Redirige a la página principal por defecto si no cumple las condiciones
+        return NextResponse.redirect(new URL('/', request.url))
       } catch (error) {
         console.error('Error fetching session:', error)
-        return NextResponse.redirect('/')
+        // Redirige a la página principal en caso de error
+        return NextResponse.redirect(new URL('/', request.url))
       }
     },
   })
