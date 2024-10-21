@@ -41,3 +41,11 @@ export const TrainingSessionsSchema = z.object({
   trainer: TrainerSchema.optional(),
 })
 export type TrainingSessions = z.infer<typeof TrainingSessionsSchema>
+
+export interface IBooking {
+  id: number
+  createdAt: Date
+  updateAt: Date
+  bookingTime: Date
+  session: ITrainingSessions // Relación con la sesión de entrenamiento
+}

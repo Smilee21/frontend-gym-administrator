@@ -5,6 +5,7 @@ import '@aws-amplify/ui-react/styles.css'
 import '../../app/globals.css'
 import { Authenticator } from '@aws-amplify/ui-react'
 import UserSidebar from '@/components/sidebars/userSidebar'
+import { Suspense } from 'react'
 
 const geistMono = localFont({
   src: '../fonts/GeistMonoVF.woff',
@@ -34,7 +35,7 @@ export default function RootLayout({
           <div className="flex flex-row">
             <UserSidebar />
             <div className="grid grid-cols-1 absolute items-center justify-center w-[100%]">
-              {children}
+              <Suspense fallback={<div>loafin</div>}>{children}</Suspense>
             </div>
           </div>
         </Authenticator.Provider>

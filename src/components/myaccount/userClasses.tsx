@@ -1,9 +1,10 @@
-import DayColumnSub from '@/components/calendar/day'
+import DayColumnSub from '../calendar-sub.ts/day-sub'
 import React, { useState } from 'react'
 import './user-clasess.css'
+import { ClassesScheduledComponent } from './userClassesScheduled'
 
 export default function UserClasses() {
-  const [section, onSectionChange] = useState(false)
+  const [section, onSectionChange] = useState(true)
 
   return (
     <section className="bg-neutral-50 font-thin flex flex-col pt-6 px-4 relative  border-[1px] rounded-sm border-solid border-black shadow-md w-[80%] h-80 overflow-auto ">
@@ -27,13 +28,7 @@ export default function UserClasses() {
           Your Classes
         </h3>
       </header>
-      {section ? (
-        <DayColumnSub></DayColumnSub>
-      ) : (
-        <section>
-          <p>tus classes agendadas</p>
-        </section>
-      )}
+      {section ? <DayColumnSub></DayColumnSub> : <ClassesScheduledComponent />}
     </section>
   )
 }

@@ -3,11 +3,15 @@ import './calendar-sub.css'
 import { ITrainingSessions } from '@/interfaces/training-sessions'
 import React, { Suspense, useEffect, useState } from 'react'
 import { formatHour } from '@/lib/utils'
-import { DialogComponent } from '../Dialog/dialog'
+import {
+  DialogComponentEnterInClass,
+  DialogOnEnterInClassFailed,
+  DialogOnEnterInClassSuccess,
+} from '../Dialog/dialog'
 import { useDialog } from '@/hooks/useDialog'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
-function DayColumnContent() {
+function DayColumnContentSub() {
   const [data, setData] = useState<ITrainingSessions[]>([])
   const { onOpen } = useDialog()
   const pathname = usePathname()
@@ -116,7 +120,15 @@ function DayColumnContent() {
           ))}
         </section>
       ))}
-      <DialogComponent />
+      <Suspense fallback={<div>loading</div>}>
+        <DialogComponentEnterInClass />
+      </Suspense>
+      <Suspense fallback={<div>loading</div>}>
+        <DialogOnEnterInClassSuccess />
+      </Suspense>
+      <Suspense fallback={<div>loading</div>}>
+        <DialogOnEnterInClassFailed />
+      </Suspense>
     </div>
   )
 }
@@ -124,7 +136,7 @@ function DayColumnContent() {
 export default function DayColumnSub() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <DayColumnContent />
+      <DayColumnContentSub />
     </Suspense>
   )
 }
