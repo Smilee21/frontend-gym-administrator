@@ -4,7 +4,7 @@ import {
   fetchUserAttributes,
   FetchUserAttributesOutput,
 } from 'aws-amplify/auth'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import UserInfo from './userInfo'
 import UserClasses from '@/components/myaccount/userClasses'
 import UserSubscription from './userSubscription'
@@ -20,14 +20,20 @@ export default function MyAccount() {
   const { user } = useAuthenticator((context) => [context.user])
   const { route } = useAuthenticator((context) => [context.route])
 
-  const getDataUser = async () => {
-    const data = await fetchUserAttributes()
-    setInfo(data)
-  }
+  const getDataUser = useCallback(async () => {
+    if (user) {
+      try {
+        const data = await fetchUserAttributes()
+        setInfo(data)
+      } catch (error) {
+        console.error('Error fetching user attributes:', error)
+      }
+    }
+  }, [user])
 
   useEffect(() => {
     getDataUser()
-  }, [])
+  }, [getDataUser])
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
