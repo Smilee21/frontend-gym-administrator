@@ -3,10 +3,20 @@ export interface ITrainingSessions {
   createdAt?: Date
   updateAt?: Date
   day?: string
+  dateOfClass?: Date
   hour?: string
   spaces?: number
   duration?: string
   trainer?: ITrainer
+}
+
+export interface TrainingSessionForm {
+  dateOfClass: string
+  hour: string
+  duration: string
+  spaces: string
+  trainerId: number
+  day?: string
 }
 
 export interface ITrainer {

@@ -21,7 +21,11 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { ITrainer, ITrainingSessions } from '@/interfaces/training-sessions'
+import {
+  ITrainer,
+  ITrainingSessions,
+  TrainingSessionForm,
+} from '@/interfaces/training-sessions'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -86,7 +90,14 @@ export default function EditTrainingSession({
   }, [params.id])
 
   const onSubmit = handleSubmit((data) => {
-    editTrainingSession(params.id, data)
+    const typedData: TrainingSessionForm = {
+      dateOfClass: data.dateOfClass,
+      hour: data.hour,
+      duration: data.duration,
+      spaces: data.spaces,
+      trainerId: data.trainerId,
+    }
+    editTrainingSession(params.id, typedData)
   })
 
   const handleBack = () => {
@@ -108,17 +119,19 @@ export default function EditTrainingSession({
             <form onSubmit={onSubmit} id="form-edit">
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="day">Day</Label>
+                  <Label htmlFor="dateOfClass">Day</Label>
                   <Input
-                    id="day"
+                    id="dateOfClass"
+                    type="date"
                     placeholder="Name of your project"
-                    {...register('day')}
-                    defaultValue={session?.day}
+                    {...register('dateOfClass')}
+                    defaultValue={session?.dateOfClass?.toLocaleString()}
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="hour">Hour</Label>
                   <Input
+                    type="time"
                     id="hour"
                     {...register('hour')}
                     placeholder="Name of your project"
@@ -129,6 +142,7 @@ export default function EditTrainingSession({
                   <Label htmlFor="duration">Duration</Label>
                   <Input
                     id="duration"
+                    type="time"
                     {...register('duration')}
                     placeholder="Name of your project"
                     defaultValue={session?.duration}
@@ -147,24 +161,26 @@ export default function EditTrainingSession({
 
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="trainerId">Trainer</Label>
-                  <Select
-                    onValueChange={(value) => setValue('trainerId', value)}
-                    defaultValue={session?.trainer?.id?.toLocaleString()}
-                  >
-                    <SelectTrigger id="trainerId">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      {trainers?.map((trainer) => (
-                        <SelectItem
-                          key={trainer?.id?.toLocaleString()}
-                          value={trainer?.id?.toLocaleString() ?? ''}
-                        >
-                          {trainer.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {session?.trainer && (
+                    <Select
+                      onValueChange={(value) => setValue('trainerId', value)}
+                      defaultValue={session?.trainer?.id?.toLocaleString()}
+                    >
+                      <SelectTrigger id="trainerId">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        {trainers?.map((trainer) => (
+                          <SelectItem
+                            key={trainer?.id?.toLocaleString()}
+                            value={trainer?.id?.toLocaleString() ?? ''}
+                          >
+                            {trainer.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
               </div>
             </form>

@@ -19,13 +19,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { ITrainer } from '@/interfaces/training-sessions'
+import { ITrainer, TrainingSessionForm } from '@/interfaces/training-sessions'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { createTrainingSession } from '../../training-session.api'
 import { useRouter } from 'next/navigation'
 import { fetchAuthSession } from 'aws-amplify/auth'
+import { addDayOfWeek } from '@/lib/utils'
 
 export default function CreateTrainingSession({
   params,
@@ -59,8 +60,19 @@ export default function CreateTrainingSession({
   }, [params.id])
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
-    createTrainingSession(data)
+    const typedData: TrainingSessionForm = {
+      dateOfClass: data.dateOfClass,
+      hour: data.hour,
+      duration: data.duration,
+      spaces: data.spaces,
+      trainerId: data.trainerId,
+    }
+
+    const sendData = addDayOfWeek(typedData)
+
+    console.log('esta es la cosa que se envia', sendData)
+
+    createTrainingSession(sendData)
   })
 
   const handleBack = () => {
@@ -75,23 +87,25 @@ export default function CreateTrainingSession({
         </header>
         <Card className="w-1/2 self-center">
           <CardHeader>
-            <CardTitle>Edit Training Session</CardTitle>
+            <CardTitle>Create Training Session</CardTitle>
             <CardDescription>Change fields</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={onSubmit} id="form-edit">
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="day">Day</Label>
+                  <Label htmlFor="dateOfClass">Day</Label>
                   <Input
-                    id="day"
+                    type="date"
+                    id="dateOfClass"
                     placeholder="Name of your project"
-                    {...register('day')}
+                    {...register('dateOfClass')}
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="hour">Hour</Label>
                   <Input
+                    type="time"
                     id="hour"
                     {...register('hour')}
                     placeholder="Name of your project"
@@ -100,6 +114,7 @@ export default function CreateTrainingSession({
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="duration">Duration</Label>
                   <Input
+                    type="time"
                     id="duration"
                     {...register('duration')}
                     placeholder="Name of your project"
