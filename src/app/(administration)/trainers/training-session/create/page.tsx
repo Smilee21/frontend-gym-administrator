@@ -69,8 +69,11 @@ export default function CreateTrainingSession({
 
   return (
     <Authenticator signUpAttributes={['name', 'family_name', 'phone_number']}>
-      <div>
-        <Card className="w-[350px]">
+      <div className="container mx-auto mt-20 w-[80%] flex flex-col gap-4 justify-center">
+        <header className="font-protest text-3xl flex flex-row justify-center w-[90%] self-center border border-white rounded-sm  bg-black text-white p-3 shadow-lg">
+          <h2>Training Sessions</h2>
+        </header>
+        <Card className="w-1/2 self-center">
           <CardHeader>
             <CardTitle>Edit Training Session</CardTitle>
             <CardDescription>Change fields</CardDescription>
