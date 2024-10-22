@@ -18,7 +18,7 @@ export async function editTrainingSession(
   })
 
   const result = await res.json()
-  console.log(result)
+  return result
 }
 
 export async function createTrainingSession(data: TrainingSessionForm) {
