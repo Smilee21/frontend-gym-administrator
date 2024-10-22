@@ -2,7 +2,6 @@
 import React from 'react'
 import './pricing.css'
 import { DialogComponentSuscribe } from '@/components/Dialog/dialog'
-import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useDialogSuscribe } from '@/hooks/useDialogSuscribe'
 
 const plans = [
@@ -43,23 +42,12 @@ const plans = [
 
 export default function Princing() {
   const { onOpen } = useDialogSuscribe()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const { replace } = useRouter()
-  const handleSubscribe = (id: number) => {
-    const params = new URLSearchParams(searchParams)
-    if (id) {
-      params.set('subscription', id.toLocaleString())
-    } else {
-      params.delete('subscription')
-    }
-
-    replace(`${pathname}?${params.toString()}`)
+  const handleSubscribe = () => {
     onOpen()
   }
 
   return (
-    <section className="relative w-full h-screen mb-12">
+    <section className="relative w-full h-full mb-12">
       <section>
         <header className="font-protest text-5xl relative mb-7 mt-7 flex justify-center ">
           <h2>Pricing</h2>
@@ -71,7 +59,7 @@ export default function Princing() {
             key={plan.id.toLocaleString()}
             onClick={() => {
               if (plan.id !== undefined) {
-                handleSubscribe(plan.id)
+                handleSubscribe()
               } else {
                 console.warn('ID is undefined')
               }
