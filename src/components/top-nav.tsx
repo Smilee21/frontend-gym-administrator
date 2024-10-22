@@ -19,11 +19,6 @@ export default function TopNavigation() {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/trainers" legacyBehavior passHref>
-              <NavigationMenuLink className="">Trainers</NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
             <Link href="/myaccount" legacyBehavior passHref>
               <NavigationMenuLink className="">Account</NavigationMenuLink>
             </Link>
