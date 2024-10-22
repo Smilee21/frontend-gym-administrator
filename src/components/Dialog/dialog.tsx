@@ -188,8 +188,6 @@ export function DialogOnEnterInClassFailed() {
 
 function DialogComponentSuscribe() {
   const { isOpen, onClose } = useDialogSuscribe()
-  const searchParams = useSearchParams()
-  const subscriptionId = searchParams.get('subscription')
 
   return (
     <Dialog onOpenChange={onClose} open={isOpen} modal defaultOpen={isOpen}>
@@ -205,7 +203,7 @@ function DialogComponentSuscribe() {
             Close
           </Button>
           <Link
-            href={`myaccount/membership/subscribe/${subscriptionId}`}
+            href={`/myaccount`}
             className="flex px-6 items-center border-[1.5] rounded-md border-black bg-green-600 hover:bg-green-900 shadow-md active:bg-opacity-5"
           >
             Yes!
