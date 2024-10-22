@@ -120,13 +120,15 @@ export default function EditTrainingSession({
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="dateOfClass">Day</Label>
-                  <Input
-                    id="dateOfClass"
-                    type="date"
-                    placeholder="Name of your project"
-                    {...register('dateOfClass')}
-                    defaultValue={session?.dateOfClass?.toLocaleString()}
-                  />
+                  {session?.dateOfClass && (
+                    <Input
+                      id="dateOfClass"
+                      type="date"
+                      placeholder="Name of your project"
+                      {...register('dateOfClass')}
+                      defaultValue={session?.dateOfClass?.toLocaleString()}
+                    />
+                  )}
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="hour">Hour</Label>
