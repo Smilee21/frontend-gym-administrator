@@ -80,13 +80,12 @@ export default function SubscribeOptions() {
         plan_type,
       }
 
-      const res = await subscribeUser(data)
-      console.log(res)
+      await subscribeUser(data)
     }
   }
 
   return (
-    <section className="relative w-[80%] h-screen mb-12">
+    <section className="relative w-[80%] h-full mb-12">
       <section>
         <header className="font-protest text-5xl relative mb-7 mt-7 flex justify-center ">
           <h2>Pricing</h2>
