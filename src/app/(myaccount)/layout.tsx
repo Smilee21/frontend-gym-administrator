@@ -28,13 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${protestStrike.variable} ${geistMono.variable} antialiased grid grid-cols-[200px_1fr]
+        className={`${protestStrike.variable} ${geistMono.variable} antialiased grid grid-cols-[200px_1fr] 
 `}
       >
         <Authenticator.Provider>
-          <div className="flex flex-row">
+          <div className="flex flex-row h-full">
             <UserSidebar />
-            <div className="grid grid-cols-1 absolute items-center justify-center w-[100%]">
+            <div className="grid grid-cols-1 absolute items-center justify-center w-[100%] ">
               <Suspense fallback={<div>loafin</div>}>{children}</Suspense>
             </div>
           </div>
